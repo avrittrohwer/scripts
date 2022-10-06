@@ -18,3 +18,7 @@ export PROMPT_COMMAND='history -a; history -c; history -r; bash_prompt'
 
 # Set default editor.
 export EDITOR='nvim'
+
+# Rootless docker setup.
+export PATH=/home/avritt/bin:$PATH
+export DOCKER_HOST=unix:///run/user/723814/docker.sock
