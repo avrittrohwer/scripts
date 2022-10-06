@@ -1,0 +1,20 @@
+# Remember more commands in history.
+export HISTSIZE=1000000000
+export HISTFILESIZE=50000000000
+
+# Ignore commands that start with a space and that are duplicates.
+export HISTCONTROL=ignoreboth
+
+# Other commands to not record.
+export HISTIGNORE='ls:bg:fg:history:exit'
+
+# Function to set shell prompt variable.
+function bash_prompt {
+	PS1="\e[1;34m$(condense-path "$PWD")\e[0m\n\$ "
+}
+
+# Write commands to history immediately after issuing them.
+export PROMPT_COMMAND='history -a; history -c; history -r; bash_prompt'
+
+# Set default editor.
+export EXITOR='nvim'

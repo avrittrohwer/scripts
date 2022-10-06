@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# usage: ses <session-name>
+#
+# Will start or attach to a dtach session backed by a pipe with filename
+# session-name in ~/Sessions.
+
+sn="$1"
+if [[ -z $sn ]]; then
+  ls ~/Sessions
+  exit
+fi
+
+dtach -A ~/Sessions/$sn -r winch dvtm-custom

@@ -1,0 +1,27 @@
+#!/bin/bash
+#
+# usage: condense-path <path>
+#
+# Set environment variable $CONDENSE_PATH_WIDTH to change how condensed the path gets.
+#
+# Example:
+# $ env CONDENSE_PATH_WIDTH=2 condense-path /home/avritt/github/scripts
+# ho/av/gi/scripts
+
+path="$1"
+width="$CONDENSE_PATH_WIDTH"
+if [ -z $width ]; then
+  width=6
+fi
+
+bn="$(basename "$path")"
+path="${path%$bn}" # delete $bn from end of $path
+path="${path//\// }" # replace '/' with ' '
+
+# build condensed path
+out=''
+for part in $path; do
+  out+="${part:0:$width}/"
+done
+
+echo "$out$bn"
