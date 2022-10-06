@@ -13,3 +13,10 @@ fi
 for f in condense-path dvtm-custom ses; do
   cp $f ~/Scripts
 done
+
+# Deploy neovim config files.
+if [ ! -d ~/.config/nvim ]; then
+  mkdir ~/.config/nvim
+fi
+
+cp -r nvim ~/.config
