@@ -17,4 +17,4 @@ function bash_prompt {
 export PROMPT_COMMAND='history -a; history -c; history -r; bash_prompt'
 
 # Set default editor.
-export EXITOR='nvim'
+export EDITOR='nvim'
