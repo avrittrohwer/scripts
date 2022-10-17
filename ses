@@ -11,4 +11,4 @@ if [[ -z $sn ]]; then
   exit
 fi
 
-dtach -A ~/Sessions/$sn -r winch dvtm-custom
+dtach -A ~/Sessions/$sn -r winch -z dvtm-custom

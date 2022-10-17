@@ -1,3 +1,4 @@
+alias python='python3'
 alias xclip='xclip -selection clip-board'
 alias shrug='echo -n "¯\_(ツ)_/¯" | xclip -selection clipboard; echo "¯\_(ツ)_/¯"'
 
