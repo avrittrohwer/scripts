@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Read files in home directory.
+for f in ~/{.bash_aliases,.bashrc,.bash_vars}; do
+  cp $f .
+done
+
+for f in ~/Scripts/{condense-path,dvtm-custom,ses}; do
+  cp $f ./Scripts
+done
+
+# Read neovim config files.
+cp -r ~/.config/nvim .
