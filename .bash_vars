@@ -22,3 +22,5 @@ export EDITOR='nvim'
 # Rootless docker setup.
 export PATH=/home/avritt/bin:$PATH
 export DOCKER_HOST=unix:///run/user/723814/docker.sock
+# FZF setup.
+export FZF_DEFAULT_COMMAND='find . -type f -not -path "*/\.git/*"'
