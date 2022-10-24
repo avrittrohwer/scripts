@@ -1,3 +1,4 @@
+" Register external plugins.
 call plug#begin()
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -41,19 +42,35 @@ set signcolumn=no  " don't show things in sign col
 inoremap jk <Esc>
 nnoremap ; :
 vnoremap ; :
+nnoremap <Leader>c :nohlsearch<Cr>
+nnoremap <Leader>s :&<Cr>
+nnoremap <Leader>p a <Esc>p
 
 " underline current line in insert mode
 hi clear CursorLine
 hi CursorLine cterm=underline
-autocmd InsertEnter * set cursorline
-autocmd InsertLeave * set nocursorline
+augroup insertfmt
+	autocmd!
+	autocmd InsertEnter * set cursorline
+	autocmd InsertLeave * set nocursorline
+augroup END
 
-nnoremap <Leader>c :nohlsearch<Cr>
-nnoremap <Leader>s :&<Cr>
-nnoremap <Leader>p a <Esc>p
+" Buffer management.
 nnoremap <Leader>x :bprevious\|bdelete #<Cr>
-nnoremap <Leader>f :GoFmt<Cr>
-
-" fzf bindings
 nnoremap <Leader>b :Buffers<Cr>
 nnoremap <Leader>o :Files<Cr>
+nnoremap <Leader>r :WinResizerStartResize<Cr>
+
+" Diagnostics management.
+nnoremap <Leader>dn :lua vim.diagnostic.goto_next()<Cr>
+nnoremap <Leader>dp :lua vim.diagnostic.goto_prev()<Cr>
+nnoremap <Leader>dd :lua vim.diagnostic.open_float()<Cr>
+
+lua << EOF
+vim.diagnostic.config({
+	virtual_text = {
+		source = 'if_many',
+		prefix = '|',
+	},
+})
+EOF

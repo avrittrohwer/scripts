@@ -6,7 +6,7 @@ for f in ~/{.bash_aliases,.bashrc,.bash_vars}; do
 done
 
 for f in ~/Scripts/{condense-path,dvtm-custom,ses}; do
-  cp $f $(basename $f)
+  cp $f "$(basename $f)"
 done
 
 # Read neovim config files.
