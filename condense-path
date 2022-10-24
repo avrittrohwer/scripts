@@ -11,17 +11,17 @@
 path="$1"
 width="$CONDENSE_PATH_WIDTH"
 if [ -z $width ]; then
-  width=6
+    width=6
 fi
 
 bn="$(basename "$path")"
-path="${path%$bn}" # delete $bn from end of $path
+path="${path%$bn}"   # delete $bn from end of $path
 path="${path//\// }" # replace '/' with ' '
 
 # build condensed path
 out=''
 for part in $path; do
-  out+="${part:0:$width}/"
+    out+="${part:0:width}/"
 done
 
 echo "$out$bn"

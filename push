@@ -2,21 +2,21 @@
 
 # Deploy files to home directory.
 for f in .bash_aliases .bashrc .bash_vars; do
-  cp $f ~/
+    cp $f ~/
 done
 
 # Deploy scripts to scripts directory.
 if [ ! -d ~/Scripts ]; then
-  mkdir ~/Scripts
+    mkdir ~/Scripts
 fi
 
 for f in condense-path dvtm-custom ses; do
-  cp $f ~/Scripts
+    cp $f ~/Scripts
 done
 
 # Deploy neovim config files.
 if [ ! -d ~/.config/nvim ]; then
-  mkdir ~/.config/nvim
+    mkdir ~/.config/nvim
 fi
 
 cp -r nvim ~/.config

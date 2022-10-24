@@ -45,6 +45,7 @@ vnoremap ; :
 nnoremap <Leader>c :nohlsearch<Cr>
 nnoremap <Leader>s :&<Cr>
 nnoremap <Leader>p a <Esc>p
+nnoremap <Leader>f mf <Bar> gg <Bar> gqG <Bar> `f
 
 " underline current line in insert mode
 hi clear CursorLine

@@ -7,8 +7,8 @@
 
 sn="$1"
 if [[ -z $sn ]]; then
-  ls ~/Sessions
-  exit
+    ls ~/Sessions
+    exit
 fi
 
 dtach -A ~/Sessions/$sn -r winch -z dvtm-custom
