@@ -6,6 +6,18 @@ Plug 'simeji/winresizer'
 Plug 'neovim/nvim-lspconfig'
 call plug#end()
 
+" Configure lsps.
+lua << EOF
+require('lspconfig').jedi_language_server.setup({})
+
+vim.diagnostic.config({
+	virtual_text = {
+		source = 'if_many',
+		prefix = '|',
+	},
+})
+EOF
+
 " Enable file type based indent configuration and syntax highlighting.
 " Note that when code is pasted via the terminal, vim by default does not detect
 " that the code is pasted (as opposed to when using vim's paste mappings), which
@@ -45,7 +57,7 @@ vnoremap ; :
 nnoremap <Leader>c :nohlsearch<Cr>
 nnoremap <Leader>s :&<Cr>
 nnoremap <Leader>p a <Esc>p
-nnoremap <Leader>f mf <Bar> gg <Bar> gqG <Bar> `f
+nnoremap <Leader>f mfgggqG`f
 
 " underline current line in insert mode
 hi clear CursorLine
@@ -66,12 +78,5 @@ nnoremap <Leader>r :WinResizerStartResize<Cr>
 nnoremap <Leader>dn :lua vim.diagnostic.goto_next()<Cr>
 nnoremap <Leader>dp :lua vim.diagnostic.goto_prev()<Cr>
 nnoremap <Leader>dd :lua vim.diagnostic.open_float()<Cr>
+nnoremap <Leader><Leader> :lua vim.lsp.buf.hover()<Cr>
 
-lua << EOF
-vim.diagnostic.config({
-	virtual_text = {
-		source = 'if_many',
-		prefix = '|',
-	},
-})
-EOF
