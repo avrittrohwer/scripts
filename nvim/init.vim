@@ -4,6 +4,7 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'simeji/winresizer'
 Plug 'neovim/nvim-lspconfig'
+Plug 'hashivim/vim-terraform'
 call plug#end()
 
 " Configure lsps.
