@@ -25,3 +25,6 @@ export DOCKER_HOST=unix:///run/user/723814/docker.sock
 
 # FZF setup.
 export FZF_DEFAULT_COMMAND='find . -type f -not -path "*/\.git/*"'
+
+# Go setup.
+export PATH=/usr/local/go/bin:/home/avritt/go/bin:$PATH

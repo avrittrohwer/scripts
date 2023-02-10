@@ -37,8 +37,9 @@ set showmatch  " show matching brackets
 set splitbelow splitright  " splits go either below or to right of current pane
 set tabstop=4
 set softtabstop=4
-set noexpandtab
+set expandtab
 set shiftwidth=4
+set smarttab
 set ignorecase smartcase  " searching doesn't care about case unless I do
 set gdefault  " use global replace by default
 set hidden  " don't require saving of buffers when I switch between them
@@ -81,3 +82,7 @@ nnoremap <Leader>dp :lua vim.diagnostic.goto_prev()<Cr>
 nnoremap <Leader>dd :lua vim.diagnostic.open_float()<Cr>
 nnoremap <Leader><Leader> :lua vim.lsp.buf.hover()<Cr>
 
+" Format management.
+nnoremap <Leader>fd :let b:storedformatprg=&l:formatprg <Cr> <Bar> :let &l:formatprg="" <Cr>
+nnoremap <Leader>fr :let &l:formatprg=b:storedformatprg <Cr>
+nnoremap <Leader>ff :echo &l:formatprg <Cr>
