@@ -20,3 +20,6 @@ if [ ! -d ~/.config/nvim ]; then
 fi
 
 cp -r nvim ~/.config
+
+# Deploy hwdb file.
+sudo cp 70-kensington-slimblade.hwdb /etc/udev/hwdb.d/
