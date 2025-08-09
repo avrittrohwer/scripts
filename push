@@ -8,6 +8,8 @@ if [ ! -d ~/Installs ]; then
 fi
 cp ./condense-path ~/Installs
 
+cp .wezterm.lua ~/.wezterm.lua
+
 if [ ! -d ~/.config/nvim ]; then
     mkdir ~/.config/nvim
 fi

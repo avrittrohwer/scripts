@@ -2,7 +2,11 @@
 
 cp ~/.bashrc .
 cp ~/.bash_aliases .
+
 cp ~/Installs/scripts/* .
+
+cp ~/.wezterm.lua .
+
 find -E ~/.config/nvim -type file -not -regex '.*(.git/|.DS_Store).*' -print \
 | while read -r file; do \
     relative="${file#/Users/avrittrohwer/.config/}"; \
