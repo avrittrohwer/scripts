@@ -1,25 +1,14 @@
 #!/bin/bash
 
-# Deploy files to home directory.
-for f in .bash_aliases .bashrc .bash_vars; do
-    cp $f ~/
-done
+cp ./.bashrc ~/.bashrc
+cp ./.bash_aliases ~/.bash_aliases
 
-# Deploy scripts to scripts directory.
-if [ ! -d ~/Scripts ]; then
-    mkdir ~/Scripts
+if [ ! -d ~/Installs ]; then
+    mkdir ~/Installs
 fi
+cp ./condense-path ~/Installs
 
-for f in condense-path dvtm-custom ses; do
-    cp $f ~/Scripts
-done
-
-# Deploy neovim config files.
 if [ ! -d ~/.config/nvim ]; then
     mkdir ~/.config/nvim
 fi
-
 cp -r nvim ~/.config
-
-# Deploy hwdb file.
-sudo cp 70-kensington-slimblade.hwdb /etc/udev/hwdb.d/

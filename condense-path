@@ -11,7 +11,7 @@
 path="$1"
 width="$CONDENSE_PATH_WIDTH"
 if [ -z $width ]; then
-    width=6
+    width=30
 fi
 
 bn="$(basename "$path")"

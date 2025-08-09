@@ -1,13 +1,12 @@
 #!/bin/bash
 
-# Read files in home directory.
-for f in ~/{.bash_aliases,.bashrc,.bash_vars}; do
-    cp $f .
+cp ~/.bashrc .
+cp ~/.bash_aliases .
+cp ~/Installs/scripts/* .
+find -E ~/.config/nvim -type file -not -regex '.*(.git/|.DS_Store).*' -print \
+| while read -r file; do \
+    relative="${file#/Users/avrittrohwer/.config/}"; \
+    dir="${relative%/*}"; \
+    [ -d "$dir" ] || mkdir -p ./"$dir"; \
+    cp "$file" ./"$relative"; \
 done
-
-for f in ~/Scripts/{condense-path,dvtm-custom,ses}; do
-    cp $f "$(basename $f)"
-done
-
-# Read neovim config files.
-cp -r ~/.config/nvim .
