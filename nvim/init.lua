@@ -1,16 +1,27 @@
 -- Plugins
 local plugins = {
     'https://github.com/junegunn/fzf.vim',
+    'https://github.com/rktjmp/lush.nvim',
     'https://github.com/simeji/winresizer', -- manually patched to remove ctrl-E binding
+
     'https://github.com/neovim/nvim-lspconfig',
     'https://github.com/hrsh7th/nvim-cmp',
     'https://github.com/hrsh7th/cmp-buffer',
     'https://github.com/hrsh7th/cmp-cmdline',
     'https://github.com/hrsh7th/cmp-path',
     'https://github.com/hrsh7th/cmp-nvim-lsp',
+
     'https://github.com/stevearc/conform.nvim',
+
     'https://github.com/tpope/vim-fugitive',
     'https://github.com/tpope/vim-rhubarb',
+
+    'https://github.com/nvim-lua/plenary.nvim', -- req for undotree
+    'https://github.com/jiaoshijie/undotree',
+
+    'https://github.com/scalameta/nvim-metals', -- TODO: setup https://github.com/scalameta/nvim-metals/discussions/39
+    -- TODO: https://github.com/mfussenegger/nvim-jdtls?tab=readme-ov-file
+    -- TOOD: https://github.com/WilliamHsieh/overlook.nvim/
 }
 vim.api.nvim_create_user_command('PluginInstall',
     function()
@@ -26,7 +37,7 @@ vim.api.nvim_create_user_command('PluginInstall',
                 vim.fn.appendbufline(buf, '$', '## '..name..': already exists')
             else
                 vim.fn.appendbufline(buf, '$', '## '..name..': downloading')
-                out = vim.fn.system('git clone --depth=1 '..link..'.git'..' '..dir)
+                local out = vim.fn.system('git clone --depth=1 '..link..'.git'..' '..dir)
                 vim.fn.appendbufline(buf, '$', out)
             end
         end
@@ -44,21 +55,75 @@ vim.cmd('set rtp+=~/.fzf')
 vim.lsp.config('*', {
     capabilities = require('cmp_nvim_lsp').default_capabilities()
 })
+
+vim.lsp.enable('cssls')
 vim.lsp.enable('pyright')
 vim.lsp.enable('bashls')
 vim.lsp.enable('tofu_ls')
-vim.filetype.add({
-    -- If filetype is left as terraform, tofu_ls server will respond with errors because it only know about tofu files.
-    extension = {
-        tf = 'opentofu',
-        tfvars = 'opentofu-vars',
-    }
-})
+vim.lsp.config('tofu_ls', {
+    filetypes = { 'opentofu', 'opentofu-vars', 'terraform', 'terraform-vars', 'hcl' },
+    on_attach = function(client, _)
+        -- Don't use language server syntax highlighting because it doesn't correctly recognize
+        -- comments
+        client.server_capabilities.semanticTokensProvider = nil
+    end,
 
+})
+--- Nvim config from https://github.com/neovim/nvim-lspconfig/blob/master/lsp/lua_ls.lua
+vim.lsp.enable('lua_ls')
+vim.lsp.config('lua_ls', {
+  on_init = function(client)
+    if client.workspace_folders then
+      local path = client.workspace_folders[1].name
+      if
+        path ~= vim.fn.stdpath('config')
+        and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
+      then
+        return
+      end
+    end
+
+    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most
+        -- likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+        -- Tell the language server how to find Lua modules same way as Neovim
+        -- (see `:h lua-module-load`)
+        path = {
+          'lua/?.lua',
+          'lua/?/init.lua',
+        },
+      },
+      -- Make the server aware of Neovim runtime files
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME
+          -- Depending on the usage, you might want to add additional paths
+          -- here.
+          -- '${3rd}/luv/library'
+          -- '${3rd}/busted/library'
+        }
+        -- Or pull in all of 'runtimepath'.
+        -- NOTE: this is a lot slower and will cause issues when working on
+        -- your own configuration.
+        -- See https://github.com/neovim/nvim-lspconfig/issues/3189
+        -- library = {
+        --   vim.api.nvim_get_runtime_file('', true),
+        -- }
+      }
+    })
+  end,
+  settings = {
+    Lua = {}
+  }
+})
 
 -- Cmp completion
 local cmp = require('cmp')
-tab_mapping = {
+local tab_mapping = {
+    ["<Esc>"] = cmp.mapping.abort(),
     ["<C-Space>"] = cmp.mapping.complete(),
     ["<Tab>"] = cmp.mapping(
         function(fallback)
@@ -80,8 +145,8 @@ tab_mapping = {
     ),
 }
 cmp.setup({
-    view = {                                                        
-        entries = {name = 'custom', selection_order = 'near_cursor' } 
+    view = {
+        entries = {name = 'custom', selection_order = 'near_cursor' }
     },
     window = {
         completion = cmp.config.window.bordered(),
@@ -97,7 +162,7 @@ cmp.setup({
 cmp.setup.cmdline(':', {
     mapping = tab_mapping,
     sources = cmp.config.sources({
-      { name = 'path' },
+      --{ name = 'path' },
       { name = 'cmdline' },
     })
 })
@@ -140,67 +205,60 @@ conform.setup({
       json = { "pyjson" },
       bash = { "shfmt" },
       sh = { "shfmt" },
+      hcl = { "tofu" },
+      terraform = { "tofu" },
+      ['terraform-vars'] = { "tofu" },
       opentofu = { "tofu" },
       ['opentofu-vars'] = { "tofu" },
   }
 })
 
+-- Undotree
+local undotree = require('undotree')
+undotree.setup({
+    float_diff = false,
+    layout = 'left_left_bottom',
+    position = 'right'
+})
+
 
 -- Visuals
---
--- The acutal loading of the colorscheme file occurs after the commands in this init file run. So highlighting needs to
--- occur after the colorscheme file loads.
-vim.cmd.colorscheme('plain')
-vim.api.nvim_create_autocmd({'ColorScheme'}, {
-    callback = function(args)
-        if args.match == 'plain' then
-            vim.opt.termguicolors = false
-            vim.opt.background = 'light'
-            vim.cmd([[
-                highlight StatusLine ctermfg=15 ctermbg=0
-                highlight StatusLineNC ctermbg=7
-                highlight Comment ctermfg=black
-                highlight ColorColumn ctermbg=7
-                highlight CursorLine cterm=underline ctermbg=15
-                highlight CursorColumn ctermbg=254
-                highlight MatchParen ctermbg=153
-            ]])
-        end
-    end,
-    desc = "Overrides some plain colorscheme settings"
-})
+vim.opt.background = 'light'
+vim.g.colors_name = 'color-wheel'
+package.loaded['color-wheel'] = nil -- hack so that when init.lua is sourced, any changes to the colorscheme are picked up.
+require('lush')(require('color-wheel')) -- custom scheme in lua/color-wheel.lua
+vim.opt.list = true
+vim.opt.listchars = 'trail: ' -- show trailing spaces as spaces. My color scheme highlights them.
 
 vim.cmd([[
 " aim cursor while in insert mode
 augroup insertfmt
-	autocmd!
-	autocmd InsertEnter * set cursorline
-	autocmd InsertLeave * set nocursorline
-	autocmd InsertEnter * set cursorcolumn
-	autocmd InsertLeave * set nocursorcolumn
+    autocmd!
+    autocmd InsertEnter * set cursorline
+    autocmd InsertLeave * set nocursorline
+    autocmd InsertEnter * set cursorcolumn
+    autocmd InsertLeave * set nocursorcolumn
 augroup END
 ]])
 
 vim.diagnostic.config({
     signs = false,
-	virtual_text = {
+    virtual_text = {
         source = "if_many", -- display diagnostic source if many sources in buffer
         prefix = "|",
     }
 })
 vim.opt.winborder = 'rounded'
 
-vim.api.nvim_create_autocmd('TextYankPost', {
+vim.api.nvim_create_autocmd('textyankpost', {
     callback = function() vim.hl.on_yank() end
 })
 
 
-
 -- Behavior
 vim.opt.wrap = false
-vim.opt.textwidth = 120
-vim.opt.formatoptions:remove('o')
-vim.opt.formatoptions:append('1')
+vim.opt.textwidth = 100
+vim.opt.formatoptions = 'crq1jp' -- by default, only autoformat comments.
 vim.opt.scrolloff = 7
 vim.opt.mouse = 'nv'
 
@@ -231,7 +289,7 @@ vim.opt.splitright = true
 vim.keymap.set('i', 'jk', '<esc>')
 vim.keymap.set({'n', 'v'}, ';', ':')
 vim.keymap.set({'n', 'i'}, '<C-k>',
-    function() 
+    function()
         vim.lsp.buf.signature_help()
     end,
     {desc = 'Show signature help'}
@@ -264,6 +322,30 @@ vim.keymap.set('n', '<Leader>x',
         ]])
     end,
     {desc = 'Delete buffer while keeping existing pane open if possible'}
+)
+vim.keymap.set('n', '<Leader>q',
+    function()
+        vim.cmd('copen')
+    end,
+    {desc = 'Open quickfix'}
+)
+vim.keymap.set('n', '<Leader>a',
+    function()
+        local t = vim.opt.formatoptions:get()
+
+        local msg
+        if t['a'] == nil or t['a'] == false then
+            t['a'] = true
+            msg = 'enabled'
+        else
+            t['a'] = false
+            msg = 'disabled'
+        end
+
+        vim.opt.formatoptions = t
+        print("Paragraph autoformatting: "..msg)
+    end,
+    {desc = 'Toggle autoformatting of paragraphs'}
 )
 
 -- Fzf.vim
@@ -324,4 +406,12 @@ vim.keymap.set({'n', 'v'}, '<Leader>f',
         conform.format()
     end,
     {desc = 'Format code' }
+)
+
+-- Undotree
+vim.keymap.set({'n', 'v'}, '<Leader>u',
+    function()
+        undotree.toggle()
+    end,
+    {desc = 'Toggle undotree window' }
 )

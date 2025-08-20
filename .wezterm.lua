@@ -1,4 +1,4 @@
-local wezterm = require 'wezterm'
+local wezterm = require('wezterm')
 local config = wezterm.config_builder()
 
 config.leader = { key = 'a', mods = 'CTRL', timout_milliseconds = 500 }
@@ -101,28 +101,28 @@ config.colors = {
   foreground = 'black',
   background = 'white',
   cursor_fg = 'black',
-  cursor_bg = '#a8a8a8',
+  cursor_bg = 'hsl: 0 0 80',
 
-  -- xterm colors except for not https://www.ditig.com/256-colors-cheat-sheet
+  -- hsl based xterm colors https://www.ditig.com/256-colors-cheat-sheet
   ansi = {
-      '#000000', -- black
-      '#ff0000', -- red
-      '#00ff00', -- lime
-      '#dede00', -- yellow, dimmer
-      '#0000ff', -- blue
-      '#ff00ff', -- fuchsia
-      '#00dddd', -- aqua, dimmer
-      '#c0c0c0', -- silver
+      'hsl: 0 0 0', -- black
+      'hsl: 0 100 37',-- marooon
+      'hsl: 120 100 37',-- green
+      'hsl: 60 100 37', -- olive
+      'hsl: 240 100 37', -- navy
+      'hsl: 300 100 37', -- purple
+      'hsl: 180 100 37', -- teal
+      'hsl: 0 0 95', -- silver
   },
   brights = {
-      '#808080', -- grey
-      '#ff0000', -- red
-      '#00ff00', -- lime
-      '#ffff00', -- yellow
-      '#0000ff', -- blue
-      '#ff00ff', -- fuchsia
-      '#00ffff', -- aqua
-      '#ffffff', -- white
+      'hsl: 0 0 30', -- grey
+      'hsl: 0 100 50',-- red
+      'hsl: 120 100 50',-- lime
+      'hsl: 60 100 50', -- yellow
+      'hsl: 240 100 50', -- blue
+      'hsl: 300 100 50', -- magenta
+      'hsl: 180 100 50', -- cyan
+      'hsl: 0 0 100', -- white
   },
 }
 

@@ -64,6 +64,9 @@ export PATH="${PATH}:${HOME}/.cargo/bin"
 # Add shellcheck
 export PATH="${PATH}:${HOME}/Installs/shellcheck-stable"
 
+# Add coursier
+export PATH="${PATH}:${HOME}/Library/Application Support/Coursier/bin"
+
 # Add aws-nuke
 export PATH="${PATH}:${HOME}/Installs/aws-nuke"
 
