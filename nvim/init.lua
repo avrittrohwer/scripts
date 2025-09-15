@@ -19,8 +19,6 @@ local plugins = {
     'https://github.com/nvim-lua/plenary.nvim', -- req for undotree
     'https://github.com/jiaoshijie/undotree',
 
-    'https://github.com/scalameta/nvim-metals', -- TODO: setup https://github.com/scalameta/nvim-metals/discussions/39
-    -- TODO: https://github.com/mfussenegger/nvim-jdtls?tab=readme-ov-file
     -- TOOD: https://github.com/WilliamHsieh/overlook.nvim/
 }
 vim.api.nvim_create_user_command('PluginInstall',
@@ -56,10 +54,9 @@ vim.lsp.config('*', {
     capabilities = require('cmp_nvim_lsp').default_capabilities()
 })
 
-vim.lsp.enable('cssls')
-vim.lsp.enable('pyright')
 vim.lsp.enable('bashls')
-vim.lsp.enable('tofu_ls')
+vim.lsp.enable('pyright')
+
 vim.lsp.config('tofu_ls', {
     filetypes = { 'opentofu', 'opentofu-vars', 'terraform', 'terraform-vars', 'hcl' },
     on_attach = function(client, _)
@@ -69,8 +66,9 @@ vim.lsp.config('tofu_ls', {
     end,
 
 })
+vim.lsp.enable('tofu_ls')
+
 --- Nvim config from https://github.com/neovim/nvim-lspconfig/blob/master/lsp/lua_ls.lua
-vim.lsp.enable('lua_ls')
 vim.lsp.config('lua_ls', {
   on_init = function(client)
     if client.workspace_folders then
@@ -119,6 +117,7 @@ vim.lsp.config('lua_ls', {
     Lua = {}
   }
 })
+vim.lsp.enable('lua_ls')
 
 -- Cmp completion
 local cmp = require('cmp')

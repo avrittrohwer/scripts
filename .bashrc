@@ -38,11 +38,8 @@ export PROMPT_COMMAND='history -a; history -c; history -r; bash_prompt'
 # Config git completions
 [[ -r "/Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash" ]] && source "/Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash"
 
-
-# Add docker
-export PATH="${PATH}:${HOME}/.docker/bin"
-mkdir -p "${HOME}/.local/share/bash-completion/completions"
-docker completion bash > "${HOME}/.local/share/bash-completion/completions/docker"
+# Add podman
+export PATH="${PATH}:${HOME}/Installs/podman-5.6.0/usr/bin/"
 
 # Add aws
 export PATH="${PATH}:${HOME}/aws-cli"

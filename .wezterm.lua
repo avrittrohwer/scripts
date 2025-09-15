@@ -82,7 +82,7 @@ config.initial_rows = 80
 config.use_fancy_tab_bar = true
 config.inactive_pane_hsb = {
   brightness = 0.95,
-  saturation = 0.2,
+  saturation = 0.7,
 }
 
 config.font_size = 12
