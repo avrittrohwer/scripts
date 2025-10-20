@@ -25,46 +25,38 @@ config.keys = {
     },
     {
         mods = 'LEADER',
+        key = 'p',
+        action = wezterm.action.PaneSelect { mode = 'Activate' }
+    },
+    {
+        mods = 'LEADER|SHIFT',
+        key = 'p',
+        action = wezterm.action.PaneSelect { mode = 'SwapWithActive' }
+    },
+    {
+        mods = 'LEADER',
         key = 'UpArrow',
-        action = wezterm.action.AdjustPaneSize { 'Up', 5 }
+        action = wezterm.action.SplitPane { direction = 'Up' }
     },
     {
         mods = 'LEADER',
         key = 'DownArrow',
-        action = wezterm.action.AdjustPaneSize { 'Down', 5 }
+        action = wezterm.action.SplitPane { direction = 'Down' }
     },
     {
         mods = 'LEADER',
         key = 'LeftArrow',
-        action = wezterm.action.AdjustPaneSize { 'Left', 5 }
+        action = wezterm.action.SplitPane { direction = 'Left' }
     },
     {
         mods = 'LEADER',
         key = 'RightArrow',
-        action = wezterm.action.AdjustPaneSize { 'Right', 5 }
-    },
-    {
-        mods = 'LEADER',
-        key = '\\',
         action = wezterm.action.SplitPane { direction = 'Right' }
     },
     {
         mods = 'LEADER',
-        key = '-',
-        action = wezterm.action.SplitPane { direction = 'Down' }
-    },
-    {
-        mods = 'LEADER|SHIFT',
         key = 'Enter',
         action = wezterm.action.TogglePaneZoomState
-    },
-    {
-        mods = 'LEADER',
-        key = 'Enter',
-        action = wezterm.action.Multiple{
-            wezterm.action.RotatePanes 'Clockwise',
-            wezterm.action.ActivatePaneDirection 'Next',
-        },
     },
 }
 for i = 1, 8 do
@@ -79,13 +71,14 @@ config.scrollback_lines = 10000
 config.initial_cols = 200
 config.initial_rows = 80
 
+config.window_decorations = "TITLE | RESIZE"
 config.use_fancy_tab_bar = true
 config.inactive_pane_hsb = {
   brightness = 0.95,
   saturation = 0.7,
 }
 
-config.font_size = 12
+config.font_size = 9
 config.font = wezterm.font(
     'Hermit',
     { weight = 'Regular' }
