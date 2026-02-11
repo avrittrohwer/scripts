@@ -3,6 +3,8 @@
 cp ./.bashrc ~/.bashrc
 cp ./.bash_aliases ~/.bash_aliases
 
+cp ./.gitconfig ~/.gitconfig
+
 if [ ! -d ~/Installs ]; then
     mkdir ~/Installs
 fi

@@ -1,0 +1,15 @@
+[user]
+	email = avritt.rohwer@exygy.com
+	name = Avritt Rohwer
+	signingKey = ~/.ssh/id_ed25519_sk_biggie.pub
+
+[gpg]
+	format = ssh
+
+[commit]
+	gpgsign = true
+
+[push]
+	default = current
+[alias]
+	bd = "!f() { git rev-parse \"$1\" >/dev/null 2>&1 || { echo \"error: branch $1 not found\"; return 1; }; for remote in $(git remote); do if git rev-parse \"$remote/$1\" >/dev/null 2>&1; then if [ -z \"$(git log $remote/$1..$1)\" ]; then git branch -D \"$1\"; return 0; fi; fi; done; echo \"error: branch $1 has unpushed commits (checked all remotes)\"; return 1; }; f"

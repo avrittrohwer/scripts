@@ -3,14 +3,30 @@
 cp ~/.bashrc .
 cp ~/.bash_aliases .
 
+cp ~/.gitconfig .
+
 cp ~/Installs/scripts/* .
 
 cp ~/.wezterm.lua .
 
-find -E ~/.config/nvim -type file -not -regex '.*(.git/|.DS_Store).*' -print \
-| while read -r file; do \
-    relative="${file#/Users/avrittrohwer/.config/}"; \
-    dir="${relative%/*}"; \
-    [ -d "$dir" ] || mkdir -p ./"$dir"; \
-    cp "$file" ./"$relative"; \
-done
+uname="$(uname -s)"
+
+if [[ "$uname" == "Linux" ]]; then
+    find ~/.config/nvim -regextype posix-extended -type f -not -regex '.*.git/.*' -print \
+    | while read -r file; do \
+        relative="${file#/home/avritt/.config/}"; \
+        dir="${relative%/*}"; \
+        [ -d "$dir" ] || mkdir -p ./"$dir"; \
+        cp "$file" ./"$relative"; \
+    done
+fi
+
+if [[ "$uname" == "Darwin" ]]; then
+    find -E ~/.config/nvim -type file -not -regex '.*(.git/|.DS_Store).*' -print \
+    | while read -r file; do \
+        relative="${file#/Users/avrittrohwer/.config/}"; \
+        dir="${relative%/*}"; \
+        [ -d "$dir" ] || mkdir -p ./"$dir"; \
+        cp "$file" ./"$relative"; \
+    done
+fi

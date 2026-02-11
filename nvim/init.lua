@@ -3,6 +3,7 @@ local plugins = {
     'https://github.com/junegunn/fzf.vim',
     'https://github.com/rktjmp/lush.nvim',
     'https://github.com/simeji/winresizer', -- manually patched to remove ctrl-E binding
+    'https://github.com/stevearc/oil.nvim',
 
     'https://github.com/neovim/nvim-lspconfig',
     'https://github.com/hrsh7th/nvim-cmp',
@@ -49,6 +50,14 @@ vim.api.nvim_create_user_command('PluginInstall',
 -- Fzf (installed outside of this config)
 vim.cmd('set rtp+=~/.fzf')
 
+-- Oil (manage files in a buffer)
+require('oil').setup({
+    columns = { "permissions", "size" },
+    buf_options = { buflisted=true },
+    watch_for_changes = true,
+    view_options = { show_hidden = true },
+})
+
 -- LSP
 vim.lsp.config('*', {
     capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -57,6 +66,11 @@ vim.lsp.config('*', {
 vim.lsp.enable('bashls')
 vim.lsp.enable('pyright')
 
+vim.filetype.add({
+    extension = {
+        tf = "terraform"
+    }
+})
 vim.lsp.config('tofu_ls', {
     filetypes = { 'opentofu', 'opentofu-vars', 'terraform', 'terraform-vars', 'hcl' },
     on_attach = function(client, _)
@@ -191,7 +205,7 @@ conform.setup({
     },
     yapf = {
         args = {
-          '--style', '{based_on_style: google, SPLIT_BEFORE_FIRST_ARGUMENT:true}',
+          '--style', '{based_on_style:google,SPLIT_BEFORE_FIRST_ARGUMENT:true,COLUMN_LIMIT=100}',
         },
         -- I didn't get this to work
         -- range_args = function(self, ctx)
@@ -265,8 +279,8 @@ vim.opt.expandtab = true -- insert spaces instead of tabs
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 0 -- use tabstop value
 
-vim.g.netrw_liststyle = 3 -- tree style listing
-vim.g.netrw_fastbrowse = 0 -- removes netrw buffer from buffer list when deleted
+-- vim.g.netrw_liststyle = 3 -- tree style listing
+-- vim.g.netrw_fastbrowse = 0 -- removes netrw buffer from buffer list when deleted
 
 vim.opt.ignorecase = true
 vim.opt.smartcase = true -- case-sensitive search if I search with caps
@@ -345,6 +359,14 @@ vim.keymap.set('n', '<Leader>a',
         print("Paragraph autoformatting: "..msg)
     end,
     {desc = 'Toggle autoformatting of paragraphs'}
+)
+vim.keymap.set('n', '<Leader>s',
+    function()
+        vim.cmd('normal! mx')
+        vim.cmd('g/\\[/normal! $vi[:sort\r')
+        vim.cmd('normal! `xzz')
+    end,
+    {desc = 'Sort every [] in the file'}
 )
 
 -- Fzf.vim

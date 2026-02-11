@@ -39,8 +39,8 @@ return lush(function(injected_functions)
     ErrorMsg       { fg=red }, -- Error messages on the command line
 
     Search         { bg=yellow }, -- Last search pattern highlighting (see 'hlsearch'). Also used for similar items that need to stand out.
-    IncSearch      { Search }, -- 'incsearch' highlighting; also used for the text replaced with ":s///c"
     CurSearch      { bg=darkyellow }, -- Highlighting a search pattern under the cursor (see 'hlsearch')
+    IncSearch      { CurSearch }, -- 'incsearch' highlighting; also used for the text replaced with ":s///c"
 
     DiffAdd        { bg=green }, -- Diff mode: Added line |diff.txt|
     DiffChange     { bg=lightgrey }, -- Diff mode: Changed line |diff.txt|

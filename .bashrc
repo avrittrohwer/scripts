@@ -2,8 +2,8 @@
 
 # If not running interactively, don't do anything.
 case $- in
-    *i*) ;;
-      *) return;;
+  *i*) ;;
+  *) return ;;
 esac
 
 # Check the window size after each command and, if necessary, update the values
@@ -28,68 +28,61 @@ export HISTIGNORE='ls:history:exit'
 
 # Config prompt
 function bash_prompt {
-	PS1="\e[1;34m$(condense-path $PWD)\e[0m\n\$ "
+  if [[ "$NIX_STORE" != "" ]]; then
+    PS1="\e[1;34mnix-shell\e[0m\n\$ "
+  else
+    PS1="\e[1;34m$(condense-path $PWD)\e[0m\n\$ "
+  fi
 }
 export PROMPT_COMMAND='history -a; history -c; history -r; bash_prompt'
 
-# From bash-completion@2 brew package
-[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && source "/opt/homebrew/etc/profile.d/bash_completion.sh"
+# Add stuff for mac
+if [[ "$(uname -s)" == "Darwin" ]]; then
+  # From bash-completion@2 brew package
+  [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && source "/opt/homebrew/etc/profile.d/bash_completion.sh"
 
-# Config git completions
-[[ -r "/Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash" ]] && source "/Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash"
+  # Config git completions
+  [[ -r "/Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash" ]] && source "/Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash"
 
-# Add podman
-export PATH="${PATH}:${HOME}/Installs/podman-5.6.0/usr/bin/"
+  # Add podman
+  export PATH="${PATH}:${HOME}/Installs/podman-5.6.0/usr/bin/"
+fi
 
 # Add aws
-export PATH="${PATH}:${HOME}/aws-cli"
-if [ -f '/Users/avrittrohwer/aws-cli/aws_completer' ]; then complete -C '/Users/avrittrohwer/aws-cli/aws_completer' aws; fi
+export PATH="${PATH}:${HOME}/Installs/aws"
+if [ -f "${HOME}/Installs/aws/aws_completer" ]; then complete -C "${HOME}/Installs/aws/aws_completer" aws; fi
 
 # Add gcloud
-if [ -f '/Users/avrittrohwer/google-cloud-sdk/path.bash.inc' ]; then . '/Users/avrittrohwer/google-cloud-sdk/path.bash.inc'; fi
-if [ -f '/Users/avrittrohwer/google-cloud-sdk/completion.bash.inc' ]; then . '/Users/avrittrohwer/google-cloud-sdk/completion.bash.inc'; fi
+if [ -f '${HOME}/google-cloud-sdk/path.bash.inc' ]; then . '${HOME}/google-cloud-sdk/path.bash.inc'; fi
+if [ -f '${HOME}/google-cloud-sdk/completion.bash.inc' ]; then . '${HOME}/google-cloud-sdk/completion.bash.inc'; fi
 
-# Add uv
+# Add binaries in ~/.local/bin
 source "$HOME/.local/bin/env"
 
-# Add pip binaries
-export PATH="${PATH}:$(python3 -m site --user-base)/bin"
-
-# Add rust
-export PATH="${PATH}:${HOME}/.cargo/bin"
-
-# Add shellcheck
-export PATH="${PATH}:${HOME}/Installs/shellcheck-stable"
-
-# Add coursier
-export PATH="${PATH}:${HOME}/Library/Application Support/Coursier/bin"
-
-# Add aws-nuke
-export PATH="${PATH}:${HOME}/Installs/aws-nuke"
+# Add Go
+export PATH="${PATH}:/usr/local/go/bin:/${HOME}/go/bin"
 
 # Add nvim
-export PATH="${PATH}:${HOME}/Installs/nvim-macos-arm64/bin"
+#export PATH="${PATH}:${HOME}/Installs/nvim-macos-arm64/bin"
 export EDITOR='nvim'
 
 # Add scripts
 export PATH="${PATH}:${HOME}/Installs/scripts"
 
-# Add skaffold
-export PATH="${PATH}:${HOME}/Installs/skaffold"
-
 # Add fzf
 if [ -f ~/.fzf.bash ]; then
-	source ~/.fzf.bash
+  source ~/.fzf.bash
 fi
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
 export FZF_CTRL_T_COMMAND='rg --files --hidden'
+# To show files ignored by .gitignore:
+# export FZF_DEFAULT_COMMAND='rg --files --hidden && rg --files --hidden --no-ignore --glob=**/*avritt*/*/*'
 
 if [ -f ~/.bash_aliases ]; then
-	source ~/.bash_aliases
+  source ~/.bash_aliases
 fi
-
-# Add homebrew
-eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # CiviForm setup
 export USE_LOCAL_CIVIFORM=1
+export USE_PODMAN_FOR_CIVIFORM=1
+export CONTAINERS_REGISTRIES_CONF=/home/avritt/registries.conf
