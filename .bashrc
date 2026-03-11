@@ -38,6 +38,9 @@ export PROMPT_COMMAND='history -a; history -c; history -r; bash_prompt'
 
 # Add stuff for mac
 if [[ "$(uname -s)" == "Darwin" ]]; then
+  # Add homebrew
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+
   # From bash-completion@2 brew package
   [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && source "/opt/homebrew/etc/profile.d/bash_completion.sh"
 
@@ -46,6 +49,9 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 
   # Add podman
   export PATH="${PATH}:${HOME}/Installs/podman-5.6.0/usr/bin/"
+
+  # Add nvim
+  export PATH="${PATH}:${HOME}/Installs/nvim-macos-arm64/bin"
 fi
 
 # Add aws
@@ -63,7 +69,6 @@ source "$HOME/.local/bin/env"
 export PATH="${PATH}:/usr/local/go/bin:/${HOME}/go/bin"
 
 # Add nvim
-#export PATH="${PATH}:${HOME}/Installs/nvim-macos-arm64/bin"
 export EDITOR='nvim'
 
 # Add scripts
