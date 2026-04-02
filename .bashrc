@@ -52,7 +52,12 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 
   # Add nvim
   export PATH="${PATH}:${HOME}/Installs/nvim-macos-arm64/bin"
+
+  # Add docker desktop
+  export PATH="${PATH}:${HOME}/.docker/bin"
 fi
+
+source "${HOME}/github/agent/source.sh"
 
 # Add aws
 export PATH="${PATH}:${HOME}/Installs/aws"
